@@ -34,24 +34,36 @@ def read_cuts(file, nr_frames):
             cut_bool.append(0)
     return np.array(cut_bool)
 
+# def save_csv(data, out_name):
+#     csv_data=pd.DataFrame(columns=['frame_no'])
+#     frames = 0
+#     for i in data:
+#         frames+=1
+#         if i == 1:
+#              csv_thread=pd.Series(data=frames,index=['frame_no'])
+#              csv_data=csv_data.append(csv_thread,ignore_index=True)
+#     csv_data.to_csv(out_name)
+
+
 def save_csv(data, out_name):
-    csv_data=pd.DataFrame(columns=['frame_no'])
+    frame_list = []
     frames = 0
     for i in data:
-        frames+=1
+        frames += 1
         if i == 1:
-             csv_thread=pd.Series(data=frames,index=['frame_no'])
-             csv_data=csv_data.append(csv_thread,ignore_index=True)
-    csv_data.to_csv(out_name)
+            frame_list.append({'frame_no': frames})  # collect as a dict
+    csv_data = pd.DataFrame(frame_list)  # convert all at once
+    csv_data.to_csv(out_name, index=False)
+
 
 def evaluate_SBD(prediction, solution):
-    
+
     fp=0
     fn=0
     tp=0
     tn=0
     pos = np.count_nonzero(np.array(prediction) == 1)
-    
+
     for i in range(len(solution)):
         if prediction[i] == 0 and solution[i]==0:
             tn+=1
@@ -94,8 +106,8 @@ def create_table(file='test_data/eval_result.json', outname = 'eval_result'):
     df = pd.DataFrame({'Conv3D': [round(conv[i],2)for i in metrics],
                   'Cineast': [round(cin[i],2) for i in metrics]
                   }, index=index)
-    
-    
+
+
     fig, ax = plt.subplots(figsize=(6,6))
     ax.axis('off')
     

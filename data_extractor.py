@@ -26,7 +26,7 @@ class data_extractor():
     def _image_insert(self,frame_64):
         self.image_pipe=np.append(self.image_pipe[1:],[frame_64],axis=0)
         return()
-    
+
     # Generator for the extracting the image and the corresponding labels
     def data_extrac(self):
         _,init_image=self.cap.read()
@@ -36,11 +36,12 @@ class data_extractor():
         self.image_pipe=np.tile(frame_64,(10,1,1,1))
 
         #csv data
-        scene_cut=pd.read_csv(self.csv_file,index_col=0)
-        frame_nos=scene_cut['frame_no']
-        ##cut_frames=frame_nos.as_matrix()
-        cut_frames=np.array(frame_nos)
-
+        # if self.csv_file is not None:
+        #     scene_cut = pd.read_csv(self.csv_file, index_col=0)
+        #     frame_nos = scene_cut['frame_no']
+        #     cut_frames = np.array(frame_nos)
+        # else:
+        cut_frames = np.array([])
         count=-self.extra_frames  
         while(self.cap.isOpened()):
             ret, frame = self.cap.read()
@@ -49,13 +50,12 @@ class data_extractor():
                 frame_64=cv2.resize(frame,(64,64),cv2.INTER_LINEAR).astype(np.float32)
                 frame_64/=255.
                 self._image_insert(frame_64)
-                #csv data retrival
+
                 if count in cut_frames:
                     prediction = 1
                 else:
                     prediction = 0
+
                 yield self.image_pipe, prediction
             else:
                 break
-
-

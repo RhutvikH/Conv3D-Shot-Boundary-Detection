@@ -123,7 +123,7 @@ class visualizer():
                                        (int(w/2)-220, 17), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), lineType=cv2.LINE_AA)
                 panel=np.vstack([panel_image,panel_text]) 
                 cv2.imshow('panel',panel)
-                                    
+
                 if step:
                     key = cv2.waitKey(0)
                     while key not in [ord('q'), ord('n'),ord('k')]:
@@ -150,4 +150,3 @@ class visualizer():
        # out.release()
         cv2.destroyAllWindows()
         return('Done')
-

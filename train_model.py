@@ -31,6 +31,3 @@ for img, cut in zip(img_set[2:],cut_set[2:]):
     except:
         model3D.train(img,cut, epoch=5*epoch, batch_size=32, out_weight=weights)
         model3D = Conv3D_model(lr=0.01)
-        
-        
-        

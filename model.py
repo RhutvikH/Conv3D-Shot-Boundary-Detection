@@ -23,7 +23,7 @@ class Conv3D_model():
         self.cuts = None
         self.images = None
         print(self.model_3d.summary())
-    
+
     # Model with 10 input frames and 1 prediction. 
     def model(self,lr=0.1):
         input_layer=(64,64,10,3)
@@ -87,12 +87,15 @@ class Conv3D_model():
         del(image_data)
         del(cut)
         print('training finished')
-        
+
     def predict_shots(self,video_file,csv_file, weights):
         gen=data_extractor(no_frames=10,video_file=video_file,csv_file=csv_file)
         self.model_3d.load_weights(weights)
         predict = []
         for image_64,_ in tqdm(gen.data_extrac(),total=gen.len):
-            img = image_64.reshape((1,64, 64, 10, 3))
-            predict.append(np.argmax((self.model_3d.predict(img))))
+            ### gen.data_extrac outputs image pipe and preds, \
+            ### but preds are not used. No use of the csv file
+            img = image_64.reshape((1, 64, 64, 10, 3))
+            predict.append(np.argmax((self.model_3d.predict(img, verbose=0))))
+
         return predict
